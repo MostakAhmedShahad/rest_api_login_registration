@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:rest_api_login_registration/screens/home_screen.dart';
+import 'package:rest_api_login_registration/screens/login_screen.dart';
 
 void main() {
   runApp(const MyApp());
@@ -17,7 +17,7 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       debugShowCheckedModeBanner: false,
-      home: const HomeScreen( ),
+      home: const LoginScreen( ),
     );
   }
 } 
