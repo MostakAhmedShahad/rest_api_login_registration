@@ -37,8 +37,11 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.pushReplacementNamed(context, '/login'); // Navigate to LoginScreen
+    Navigator.pushReplacementNamed(
+        context, '/login'); // Navigate to LoginScreen
   }
+
+  
 
   @override
   Widget build(BuildContext context) {
@@ -54,20 +57,32 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             if (photo.isNotEmpty)
               CircleAvatar(
                 radius: 40,
                 backgroundImage: NetworkImage(photo),
               ),
-            SizedBox(height: 10),
-            Text('$firstName $lastName', style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            SizedBox(height: 15),
+            Text('$firstName $lastName',
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+            SizedBox(height: 20),
             Text(email, style: TextStyle(fontSize: 18, color: Colors.grey)),
+            SizedBox(height: 20),
             Text('Mobile: $mobile', style: TextStyle(fontSize: 18)),
-            Text('Toten: $token', style: TextStyle(fontSize: 18)),
-
-            Text('welcome')
+            SizedBox(height: 20),
+            ElevatedButton(
+              child: Text('Elevated Button'),
+              style: ElevatedButton.styleFrom(
+                textStyle: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 10,
+                    fontStyle: FontStyle.normal),
+              ),
+              onPressed: () {},
+            ),
           ],
         ),
       ),
