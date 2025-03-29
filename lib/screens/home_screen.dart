@@ -40,7 +40,41 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(
         context, '/login'); // Navigate to LoginScreen
   }
-  
+
+  Future <void> _loadTask() async {
+
+
+  }
+    Future<void> _dialogBuilder(BuildContext context) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Basic dialog title'),
+          content: const Text(
+            'Add Task',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              child: const Text('Disable'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              child: const Text('Enable'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
 
 
@@ -82,7 +116,10 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 10,
                     fontStyle: FontStyle.normal),
               ),
-              onPressed: () {},
+              onPressed: (){
+                _dialogBuilder(context);
+
+              },
             ),
           ],
         ),
