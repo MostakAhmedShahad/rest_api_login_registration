@@ -9,6 +9,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController descriptionController = TextEditingController();
+  final TextEditingController statusController = TextEditingController();
   String firstName = '';
   String lastName = '';
   String email = '';
@@ -41,29 +44,41 @@ class _HomeScreenState extends State<HomeScreen> {
         context, '/login'); // Navigate to LoginScreen
   }
 
-  Future <void> _loadTask() async {
-
-
-  }
-    Future<void> _dialogBuilder(BuildContext context) {
+  Future<void> _loadTask() async {}
+  Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text('Basic dialog title'),
-          content: const Text(
-            'Add Task',
+          title: const Text('Add Task'),
+          content: Column(
+            children: [
+              TextFormField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+              TextFormField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge),
               child: const Text('Disable'),
               onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
             TextButton(
-              style: TextButton.styleFrom(textStyle: Theme.of(context).textTheme.labelLarge),
+              style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge),
               child: const Text('Enable'),
               onPressed: () {
                 Navigator.of(context).pop();
@@ -74,9 +89,6 @@ class _HomeScreenState extends State<HomeScreen> {
       },
     );
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -116,9 +128,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     fontSize: 10,
                     fontStyle: FontStyle.normal),
               ),
-              onPressed: (){
+              onPressed: () {
                 _dialogBuilder(context);
-
               },
             ),
           ],
