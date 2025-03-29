@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -9,15 +11,20 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final String apiUrl = 'https://task.teamrabbil.com/api/v1/createTask';
   final TextEditingController titleController = TextEditingController();
   final TextEditingController descriptionController = TextEditingController();
   final TextEditingController statusController = TextEditingController();
+
+  String result = '';
   String firstName = '';
   String lastName = '';
   String email = '';
   String mobile = '';
   String photo = '';
   String token = '';
+
+  get http => null;
 
   @override
   void initState() {
@@ -44,7 +51,52 @@ class _HomeScreenState extends State<HomeScreen> {
         context, '/login'); // Navigate to LoginScreen
   }
 
-  Future<void> _loadTask() async {}
+  Future<void> _loadTask() async {
+    Future<void> _loadTask() async {
+      try {
+        SharedPreferences prefs = await SharedPreferences.getInstance();
+        String? token =
+            prefs.getString('token'); // Retrieve token from SharedPreferences
+
+        if (token == null) {
+          throw Exception("No token found! Please log in again.");
+        }
+
+        final Map<String, dynamic> requestBody = {
+          'title': titleController.text,
+          'description': descriptionController.text,
+          'status': statusController.text,
+        };
+
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {
+            'Content-Type': 'application/json; charset=UTF-8',
+            'Authorization': 'Bearer $token', // Passing token in headers
+          },
+          body: jsonEncode(requestBody),
+        );
+
+        if (response.statusCode == 200 || response.statusCode == 201) {
+          final responseData = jsonDecode(response.body);
+
+          // Navigate to HomeScreen after successful request
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          );
+        } else {
+          throw Exception(
+              'Request failed. Status Code: ${response.statusCode}');
+        }
+      } catch (e) {
+        setState(() {
+          result = 'Error: $e';
+        });
+      }
+    }
+  }
+
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
       context: context,
@@ -62,8 +114,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 decoration: InputDecoration(labelText: 'Description'),
               ),
               TextFormField(
-                controller: titleController,
-                decoration: InputDecoration(labelText: 'Title'),
+                controller: statusController,
+                decoration: InputDecoration(labelText: 'Status'),
               ),
             ],
           ),
@@ -71,16 +123,10 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               style: TextButton.styleFrom(
                   textStyle: Theme.of(context).textTheme.labelLarge),
-              child: const Text('Disable'),
+              child: const Text('Creat'),
               onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                  textStyle: Theme.of(context).textTheme.labelLarge),
-              child: const Text('Enable'),
-              onPressed: () {
+                _loadTask;
+
                 Navigator.of(context).pop();
               },
             ),
