@@ -118,7 +118,7 @@ class _HomeScreenState extends State<HomeScreen> {
             TextButton(
               style: TextButton.styleFrom(
                   textStyle: Theme.of(context).textTheme.labelLarge),
-              child: const Text('Creat'),
+              child: const Text('Create'),
               onPressed: () {
                 _loadTask();
 
