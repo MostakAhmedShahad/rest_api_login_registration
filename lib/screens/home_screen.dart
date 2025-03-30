@@ -1,7 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:http/http.dart' as http; // Import http package
+import 'package:http/http.dart' as http;
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -45,13 +46,17 @@ class _HomeScreenState extends State<HomeScreen> {
   Future<void> _logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.clear();
-    Navigator.pushReplacementNamed(context, '/login');
+    Navigator.pushReplacementNamed(
+        context, '/login'); // Navigate to LoginScreen
   }
 
   Future<void> _loadTask() async {
     try {
       SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token = prefs.getString('token');
+      String? token =
+          prefs.getString('token'); // Retrieve token from SharedPreferences
+      print(token);
+
       if (token == null) {
         throw Exception("No token found! Please log in again.");
       }
@@ -66,14 +71,17 @@ class _HomeScreenState extends State<HomeScreen> {
         Uri.parse(apiUrl),
         headers: {
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token',
+          'Authorization': 'Bearer $token', // Passing token in headers
         },
         body: jsonEncode(requestBody),
       );
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        final responseData = jsonDecode(response.body);
+
+        // Navigate to HomeScreen after successful request
         setState(() {}); // Refresh UI instead of navigating
-        Navigator.pop(context); // Close the dialog
+        Navigator.pop(context);
       } else {
         throw Exception('Request failed. Status Code: ${response.statusCode}');
       }
@@ -90,30 +98,31 @@ class _HomeScreenState extends State<HomeScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: const Text('Add Task'),
-          content: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                TextFormField(
-                  controller: titleController,
-                  decoration: InputDecoration(labelText: 'Title'),
-                ),
-                TextFormField(
-                  controller: descriptionController,
-                  decoration: InputDecoration(labelText: 'Description'),
-                ),
-                TextFormField(
-                  controller: statusController,
-                  decoration: InputDecoration(labelText: 'Status'),
-                ),
-              ],
-            ),
+          content: Column(
+            children: [
+              TextFormField(
+                controller: titleController,
+                decoration: InputDecoration(labelText: 'Title'),
+              ),
+              TextFormField(
+                controller: descriptionController,
+                decoration: InputDecoration(labelText: 'Description'),
+              ),
+              TextFormField(
+                controller: statusController,
+                decoration: InputDecoration(labelText: 'Status'),
+              ),
+            ],
           ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Create'),
+              style: TextButton.styleFrom(
+                  textStyle: Theme.of(context).textTheme.labelLarge),
+              child: const Text('Creat'),
               onPressed: () {
                 _loadTask();
+
+                Navigator.of(context).pop();
               },
             ),
           ],
