@@ -155,7 +155,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             SizedBox(height: 15),
             Text('$firstName $lastName',
-                style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold)),
+                style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             Text(email, style: TextStyle(fontSize: 18, color: Colors.grey)),
             SizedBox(height: 20),
