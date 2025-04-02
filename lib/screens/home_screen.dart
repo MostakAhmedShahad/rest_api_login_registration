@@ -49,48 +49,49 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(
         context, '/login'); // Navigate to LoginScreen
   }
+ Future<void> _loadTask() async {
+  try {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    String? token = prefs.getString('token');
 
-  Future<void> _loadTask() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? token =
-          prefs.getString('token'); // Retrieve token from SharedPreferences
-      print(token);
-
-      if (token == null) {
-        throw Exception("No token found! Please log in again.");
-      }
-
-      final Map<String, dynamic> requestBody = {
-        'title': titleController.text,
-        'description': descriptionController.text,
-        'status': statusController.text,
-      };
-
-      final response = await http.post(
-        Uri.parse(apiUrl),
-        headers: {
-          'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer $token', // Passing token in headers
-        },
-        body: jsonEncode(requestBody),
-      );
-
-      if (response.statusCode == 200 || response.statusCode == 201) {
-        final responseData = jsonDecode(response.body);
-
-        // Navigate to HomeScreen after successful request
-        setState(() {}); // Refresh UI instead of navigating
-        Navigator.pop(context);
-      } else {
-        throw Exception('Request failed. Status Code: ${response.statusCode}');
-      }
-    } catch (e) {
-      setState(() {
-        result = 'Error: $e';
-      });
+    if (token == null || token.isEmpty) {
+      throw Exception("No valid token found. Please log in again.");
     }
+
+    final Map<String, dynamic> requestBody = {
+      'title': titleController.text,
+      'description': descriptionController.text,
+      'status': 'New',  // Ensure valid status
+    };
+
+    print("Sending Request: $requestBody");
+
+    final response = await http.post(
+      Uri.parse(apiUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode(requestBody),
+    );
+
+    print("Response Code: ${response.statusCode}");
+    print("Response Body: ${response.body}");
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      setState(() {});
+      Navigator.pop(context);
+    } else {
+      throw Exception('Request failed. Status Code: ${response.statusCode}, Response: ${response.body}');
+    }
+  } catch (e) {
+    setState(() {
+      result = 'Error: $e';
+    });
+    print("Error: $e");
   }
+}
+
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
