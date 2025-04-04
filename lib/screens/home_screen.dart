@@ -111,7 +111,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               TextFormField(
                 controller: statusController,
-                decoration: InputDecoration(labelText: 'Status New or Old'),
+                decoration: InputDecoration(labelText: 'Status  '),
               ),
             ],
           ),
