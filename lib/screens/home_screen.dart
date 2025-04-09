@@ -162,7 +162,7 @@ class _HomeScreenState extends State<HomeScreen> {
             Text('$firstName $lastName',
                 style: TextStyle(fontSize: 23, fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
-            Text(email, style: TextStyle(fontSize: 18, color: Colors.grey)),
+            Text(email, style: TextStyle(fontSize: 20, color: Colors.grey)),
             SizedBox(height: 20),
             Text('Mobile: $mobile', style: TextStyle(fontSize: 18)),
             SizedBox(height: 20),
