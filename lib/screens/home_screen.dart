@@ -51,8 +51,10 @@ class _HomeScreenState extends State<HomeScreen> {
   }
  Future<void> _loadTask() async {
   try {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    String? token = prefs.getString('token');
+    String? token = this.token;
+    print("Token being sent: $token");
+
+
 
     if (token == null || token.isEmpty) {
       throw Exception("No valid token found. Please log in again.");
@@ -65,10 +67,7 @@ class _HomeScreenState extends State<HomeScreen> {
     };
 
     print("Sending Request: $requestBody");
-    print("Sending Request: $requestBody");
-     
-     print("Sending Request: $requestBody");
-     print("Sending Request: $requestBody");
+    
 
     final response = await http.post(
       Uri.parse(apiUrl),
