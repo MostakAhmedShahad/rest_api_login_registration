@@ -41,6 +41,7 @@ class _LoginScreenState extends State<LoginScreen> {
         final responseData = jsonDecode(response.body);
         String token = responseData['token'];
         print(token); //eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDM1Mjc0MTUsImRhdGEiOiJzaGFoYWQ3NEBnbWFpbC5jb20iLCJpYXQiOjE3NDM0NDEwMTV9.CMsy4BUcH9_alklRAwgz37Et5j9MOdF8SiHxewP7cP4
+        print(token);
         Map<String, dynamic> userData = responseData['data'];
 
         SharedPreferences prefs = await SharedPreferences.getInstance();
