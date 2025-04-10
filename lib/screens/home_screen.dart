@@ -49,52 +49,52 @@ class _HomeScreenState extends State<HomeScreen> {
     Navigator.pushReplacementNamed(
         context, '/login'); // Navigate to LoginScreen
   }
- Future<void> _loadTask() async {
-  try {
-    String? token = this.token;
-    print("Token being sent: $token");
 
+  Future<void> _loadTask() async {
+    try {
+      String? token = this.token;
+      print("Token being sent: $token");
+      print('Authorization header: Bearer $token');
 
+      if (token == null || token.isEmpty) {
+        throw Exception("No valid token found. Please log in again.");
+      }
 
-    if (token == null || token.isEmpty) {
-      throw Exception("No valid token found. Please log in again.");
+      final Map<String, dynamic> requestBody = {
+        'title': titleController.text,
+        'description': descriptionController.text,
+        'status': 'New', // Ensure valid status
+      };
+
+      print("Sending Request: $requestBody");
+
+      final response = await http.post(
+        Uri.parse(apiUrl),
+         headers: {
+          'Content-Type': 'application/json',
+          'Authorization':
+              'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NDQzOTUwOTQsImRhdGEiOiJzaGFoYWQ3NEBnbWFpbC5jb20iLCJpYXQiOjE3NDQzMDg2OTR9.68ZPu3qxcsJrvmjK7jONpBvl_8Fd9J_5YxD4KXzg8ro',
+        },
+        body: jsonEncode(requestBody),
+      );
+
+      print("Response Code: ${response.statusCode}");
+      print("Response Body: ${response.body}");
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        setState(() {});
+        Navigator.pop(context);
+      } else {
+        throw Exception(
+            'Request failed. Status Code: ${response.statusCode}, Response: ${response.body}');
+      }
+    } catch (e) {
+      setState(() {
+        result = 'Error: $e';
+      });
+      print("Error: $e");
     }
-
-    final Map<String, dynamic> requestBody = {
-      'title': titleController.text,
-      'description': descriptionController.text,
-      'status': 'New',  // Ensure valid status
-    };
-
-    print("Sending Request: $requestBody");
-    
-
-    final response = await http.post(
-      Uri.parse(apiUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer $token',
-      },
-      body: jsonEncode(requestBody),
-    );
-
-    print("Response Code: ${response.statusCode}");
-    print("Response Body: ${response.body}");
-
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      setState(() {});
-      Navigator.pop(context);
-    } else {
-      throw Exception('Request failed. Status Code: ${response.statusCode}, Response: ${response.body}');
-    }
-  } catch (e) {
-    setState(() {
-      result = 'Error: $e';
-    });
-    print("Error: $e");
   }
-}
-
 
   Future<void> _dialogBuilder(BuildContext context) {
     return showDialog<void>(
@@ -123,9 +123,8 @@ class _HomeScreenState extends State<HomeScreen> {
               style: TextButton.styleFrom(
                   textStyle: Theme.of(context).textTheme.labelLarge),
               child: const Text('Create'),
-              onPressed: () {
-                _loadTask();
-
+              onPressed: () async {
+                await _loadTask();
                 Navigator.of(context).pop();
               },
             ),
