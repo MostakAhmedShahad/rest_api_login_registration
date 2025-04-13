@@ -55,6 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
       String? token = this.token;
       print("Token being sent: $token");
       print('Authorized header: Bearer $token');
+      print('Authorized header: Bearer $token');
 
       if (token == null || token.isEmpty) {
         throw Exception("No valid token found. Please log in again.");
