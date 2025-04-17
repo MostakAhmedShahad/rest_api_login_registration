@@ -163,7 +163,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SizedBox(height: 20),
             Text(email, style: TextStyle(fontSize: 22, color: Colors.grey)),
             SizedBox(height: 20),
-            Text('Mobile: $mobile', style: TextStyle(fontSize: 20)),
+            Text('Mobile: $mobile', style: TextStyle(fontSize: 22)),
             SizedBox(height: 20),
             ElevatedButton(
               child: Text('Create Task'),
